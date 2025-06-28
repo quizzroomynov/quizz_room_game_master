@@ -433,7 +433,7 @@ const Buzzer: React.FC = () => {
 
           {selectedQuestionId && (
             <div style={{ marginTop: '1rem' }}>
-              <button onClick={handleStartGame}>Lancer la partie</button>
+              <button onClick={handleStartGame}>Lancer la question</button>
             </div>
           )}
 
