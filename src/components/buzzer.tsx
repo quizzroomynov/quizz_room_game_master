@@ -485,6 +485,15 @@ const Buzzer: React.FC = () => {
                         const data = await res.json();
                         console.log('Réponse du serveur:', data);
 
+                            const selectedQuestion = getSelectedQuestion();
+                          if (!selectedQuestion) return;
+
+                        socket.emit('result question', {
+                          partieName: currentGame.name_partie,
+                          question: selectedQuestion.label,
+                          winner: gagnant.userName,
+                        });
+
                         // Réinitialiser le processus
                         setSelectedThemeId("");
                         setQuestions([]);
@@ -501,6 +510,16 @@ const Buzzer: React.FC = () => {
             const handleMauvaiseReponse = () => {
               if (!buzzResult || !buzzResult.buzzers) return;
               const nextIndex = currentIndex + 1;
+
+              const selectedQuestion = getSelectedQuestion();
+                if (!selectedQuestion) return;
+
+              socket.emit('question result', {
+                partieName: currentGame.name_partie,
+                question: selectedQuestion.label,
+                winner: null
+              });
+
 
               if (nextIndex >= buzzResult.buzzers.length) {
                 // Plus aucun joueur dans la file, on revient à la sélection du thème sans fetch
