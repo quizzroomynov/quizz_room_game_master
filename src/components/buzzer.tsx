@@ -106,7 +106,7 @@ const Buzzer: React.FC = () => {
     if (remainingTime <= 0) {
       socket.emit('timer ended', {
         gameId: currentGame?.id,
-        questionId: selectedQuestionId,
+        question: selectedQuestionId,
       });
       console.log('Timer terminé - message "timer ended" envoyé via WebSocket');
       setRemainingTime(null); // Arrête le compte à rebours
@@ -169,7 +169,6 @@ const Buzzer: React.FC = () => {
 
       socket.emit('game start', {
         game: name_partie,
-        questionId: selectedQuestionId,
       });
 
       console.log('Message "game start" envoyé via WebSocket', {
@@ -335,12 +334,14 @@ const Buzzer: React.FC = () => {
     const selectedQuestion = getSelectedQuestion();
     if (!selectedQuestion) return;
 
-    socket.emit('game start', {
+    socket.emit('question start', {
       gameId: currentGame.id,
       questionId: selectedQuestionId,
+      question: selectedQuestion.label,
+      timer: selectedQuestion.timer,
     });
 
-    console.log('Message "game start" envoyé via WebSocket', {
+    console.log('Message "question start" envoyé via WebSocket', {
       gameId: currentGame.id,
       questionId: selectedQuestionId,
     });
