@@ -491,7 +491,8 @@ const Buzzer: React.FC = () => {
                         socket.emit('result question', {
                           partieName: currentGame.name_partie,
                           question: selectedQuestion.label,
-                          winner: gagnant.userName,
+                          winner: true,
+                          username: gagnant.userName,
                         });
 
                         // Réinitialiser le processus
@@ -514,11 +515,6 @@ const Buzzer: React.FC = () => {
               const selectedQuestion = getSelectedQuestion();
                 if (!selectedQuestion) return;
 
-              socket.emit('question result', {
-                partieName: currentGame.name_partie,
-                question: selectedQuestion.label,
-                winner: null
-              });
 
 
               if (nextIndex >= buzzResult.buzzers.length) {
@@ -535,6 +531,21 @@ const Buzzer: React.FC = () => {
               }
 
               const suivant = buzzResult.buzzers[nextIndex];
+              console.log("ici"+suivant)
+
+                // Trouver le nom associé au buzzerId dans la liste globale des joueurs
+              const joueurSuivant = buzzers.find(j => j.buzzerId === suivant.buzzerId);
+              const nomJoueurSuivant = joueurSuivant ? joueurSuivant.userName : "Joueur inconnu";
+
+              console.log("Prochain joueur:", nomJoueurSuivant);
+
+              socket.emit('question result', {
+                partieName: currentGame?.name_partie,
+                question: selectedQuestion.label,
+                winner: false,
+                nextUser: nomJoueurSuivant, 
+              });
+
               setBuzzResult({
                 ...buzzResult,
                 premierBuzzerId: Number(suivant.buzzerId),
